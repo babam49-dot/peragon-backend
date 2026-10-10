@@ -9,9 +9,13 @@ async function bootstrap() {
   .setVersion('1.0')
   .addTag('PIS')
   .build();
-const document = SwaggerModule.createDocument(app, config);
-SwaggerModule.setup('api', app, document);
-  await app.listen(3000);
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, document);
+  app.enableCors();
+  const port = process.env.PORT || 3001;
+  await app.listen(port);
+  console.log(`🚀 NestJS Backend running on: http://localhost:${port}`);
+  console.log(`📚 Swagger Docs available at: http://localhost:${port}/api`);
 }
 bootstrap();
 ///
