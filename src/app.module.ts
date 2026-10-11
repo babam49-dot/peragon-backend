@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { UserEntity } from './entities/user.entity';
 import { PhotoEntity } from './entities/photo.entity';
+import { PositionsModule } from './positions/positions.module';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
@@ -24,6 +25,7 @@ dotenv.config();
       entities: [UserEntity, PhotoEntity],
       synchronize: true,
     }),
+    PositionsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
