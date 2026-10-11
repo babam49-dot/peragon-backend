@@ -6,6 +6,7 @@ import { DataSource } from 'typeorm';
 import { UserEntity } from './entities/user.entity';
 import { PhotoEntity } from './entities/photo.entity';
 import { PositionsModule } from './positions/positions.module';
+import { Position } from './positions/entities/position.entity';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
@@ -22,7 +23,8 @@ dotenv.config();
       ssl: {
         rejectUnauthorized: false,
       },
-      entities: [UserEntity, PhotoEntity],
+      entities: [Position, UserEntity, PhotoEntity],
+      autoLoadEntities: true,
       synchronize: true,
     }),
     PositionsModule,
@@ -37,4 +39,3 @@ export class AppModule {
     }
   }
 }
-
