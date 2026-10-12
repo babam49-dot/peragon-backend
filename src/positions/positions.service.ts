@@ -1,26 +1,58 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Position } from './entities/position.entity';
 import { CreatePositionDto } from './dto/create-position.dto';
 import { UpdatePositionDto } from './dto/update-position.dto';
 
 @Injectable()
 export class PositionsService {
-  create(createPositionDto: CreatePositionDto) {
-    return 'This action adds a new position';
+  constructor(
+    @InjectRepository(Position)
+    private readonly positionRepository: Repository<Position>,
+  ) {}
+
+  async create(createPositionDto: CreatePositionDto): Promise<Position> {
+    const positionData = {
+      ...createPositionDto,
+      parentId: createPositionDto.parentId ? createPositionDto.parentId : null,
+    };
+    const position = this.positionRepository.create(positionData);
+    return await this.positionRepository.save(position);
   }
 
-  findAll() {
-    return `This action returns all positions`;
+  async findAll(): Promise<Position[]> {
+    return await this.positionRepository.find({
+      relations: ['parent', 'children'],
+      order: { createdAt: 'ASC' },
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} position`;
+  async findOne(id: string): Promise<Position> {
+    const position = await this.positionRepository.findOne({
+      where: { id },
+      relations: ['parent', 'children'],
+    });
+    if (!position) {
+      throw new NotFoundException(`Position with ID ${id} not found`);
+    }
+    return position;
   }
 
-  update(id: number, updatePositionDto: UpdatePositionDto) {
-    return `This action updates a #${id} position`;
+  async update(id: string, updatePositionDto: UpdatePositionDto): Promise<Position> {
+    const position = await this.findOne(id);
+    const updateData = {
+      ...updatePositionDto,
+      ...(updatePositionDto.parentId !== undefined && {
+        parentId: updatePositionDto.parentId ? updatePositionDto.parentId : null,
+      }),
+    };
+    Object.assign(position, updateData);
+    return await this.positionRepository.save(position);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} position`;
+  async remove(id: string): Promise<Position> {
+    const position = await this.findOne(id);
+    return await this.positionRepository.remove(position);
   }
 }
