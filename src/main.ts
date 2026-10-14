@@ -13,9 +13,8 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
   app.enableCors();
   const port = process.env.PORT || 3001;
-  await app.listen(port);
+  await app.listen(port, '0.0.0.0');
   console.log(`🚀 NestJS Backend running on: http://localhost:${port}`);
   console.log(`📚 Swagger Docs available at: http://localhost:${port}/api`);
 }
 bootstrap();
-///
