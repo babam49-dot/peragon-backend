@@ -6,13 +6,13 @@
   "private": true,
   "license": "UNLICENSED",
   "engines": {
-    "node": ">=18.0.0 <=22.0.0"
+    "node": ">=18.0.0"
   },
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "start": "nest start",
+    "start": "node dist/main",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
@@ -34,6 +34,7 @@
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",
+    "swagger-ui-express": "^4.6.3",
     "typeorm": "^0.3.10",
     "webpack": "^5.75.0"
   },
